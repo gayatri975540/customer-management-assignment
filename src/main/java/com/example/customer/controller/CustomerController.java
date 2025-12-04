@@ -1,7 +1,7 @@
 package com.example.customer.controller;
 import com.example.customer.dto.CustomerRequest;
 import com.example.customer.dto.CustomerResponse;
-import com.example.customer.service.CustomerService;
+import com.example.customer.service.CustomerServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -11,9 +11,9 @@ import java.util.List;
 @RequestMapping("/customers")
 public class CustomerController {
 
-    private final CustomerService service;
+    private final CustomerServiceImpl service;
 
-    public CustomerController(CustomerService service){ this.service = service; }
+    public CustomerController(CustomerServiceImpl service){ this.service = service; }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

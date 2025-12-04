@@ -4,6 +4,7 @@ info:
   version: 1.0.0
 
 paths:
+
   /customers:
     post:
       summary: Create a new customer
@@ -24,7 +25,7 @@ paths:
           description: Invalid request
 
     get:
-      summary: Get customer by name or email
+      summary: Get customers by name or email
       parameters:
         - in: query
           name: name
@@ -51,8 +52,8 @@ paths:
       summary: Retrieve customer by ID
       parameters:
         - in: path
-          name: id
           required: true
+          name: id
           schema:
             type: string
       responses:
@@ -69,8 +70,8 @@ paths:
       summary: Update customer by ID
       parameters:
         - in: path
-          name: id
           required: true
+          name: id
           schema:
             type: string
       requestBody:
@@ -81,22 +82,43 @@ paths:
               $ref: "#/components/schemas/CustomerRequest"
       responses:
         "200":
-          description: Updated successfully
+          description: Customer updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomerResponse"
+        "404":
+          description: Customer not found
 
     delete:
       summary: Delete customer by ID
       parameters:
         - in: path
-          name: id
           required: true
+          name: id
           schema:
             type: string
       responses:
         "204":
-          description: Deleted successfully
+          description: Customer deleted successfully
+
+  /customers/all:
+    get:
+      summary: List all customers
+      responses:
+        "200":
+          description: List of customers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CustomerResponse"
 
 components:
+
   schemas:
+
     CustomerRequest:
       type: object
       properties:
@@ -104,6 +126,7 @@ components:
           type: string
         email:
           type: string
+          format: email
         annualSpend:
           type: number
           format: double
@@ -115,15 +138,24 @@ components:
         - email
 
     CustomerResponse:
-      allOf:
-        - $ref: "#/components/schemas/CustomerRequest"
-        - type: object
-          properties:
-            id:
-              type: string
-            tier:
-              type: string
-              enum:
-                - Silver
-                - Gold
-                - Platinum
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        annualSpend:
+          type: number
+          format: double
+        lastPurchaseDate:
+          type: string
+          format: date-time
+        tier:
+          type: string
+          enum:
+            - Silver
+            - Gold
+            - Platinum
